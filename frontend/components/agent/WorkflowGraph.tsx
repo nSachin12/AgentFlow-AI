@@ -382,16 +382,14 @@ function deriveNodeState(
   }
 
   if (id === "document") {
-    return status === "COMPLETED"
-      ? "completed"
-      : agent.includes("document")
+    return agent.includes("document")
       ? "active"
       : status === "GENERATING_DOCUMENT"
       ? "active"
       : "pending";
   }
 
-  return status === "COMPLETED" ? "completed" : "pending";
+  return "pending";
 }
 
 function getActiveNodeId(
@@ -733,7 +731,7 @@ function WorkflowGraphImpl({
         "user-planner",
         "user",
         "planner",
-        status === "CREATED" ? "waiting for input" : status === "COMPLETED" ? undefined : undefined,
+        status === "CREATED" ? "waiting for input" : undefined,
         status,
         states.user,
         states.planner
