@@ -9,11 +9,24 @@ from app.utils.helpers import extract_json
 class Reflection:
 
     @staticmethod
-    def review(
-        job,
-        request: str,
-        content: str
-    ):
+    def build_summary(job, request: str) -> str:
+        lines = [f"Request: {request}"]
+
+        if job.assumptions:
+            lines.append("Assumptions: " + "; ".join(job.assumptions[:5]))
+
+        lines.append("Plan steps: " + ", ".join(
+            step.title for step in job.plan
+        ))
+
+        for item in job.generated_content:
+            snippet = (item.get("output") or "")[:300].replace("\n", " ")
+            lines.append(f"- {item['title']}: {snippet}")
+
+        return "\n".join(lines)
+
+    @staticmethod
+    def review(job, request: str):
 
         def on_retry(attempt, max_retries, error):
             EventManager.add_event(
@@ -27,6 +40,8 @@ class Reflection:
         def on_usage(tokens):
             job.tokens_used += tokens
 
+        summary = Reflection.build_summary(job, request)
+
         with open(
             "app/prompts/reflection_prompt.txt",
             "r",
@@ -34,15 +49,8 @@ class Reflection:
         ) as file:
             prompt = file.read()
 
-        prompt = prompt.replace(
-            "{request}",
-            request
-        )
-
-        prompt = prompt.replace(
-            "{content}",
-            content
-        )
+        prompt = prompt.replace("{request}", request)
+        prompt = prompt.replace("{content}", summary)
 
         response = llm_service.generate(
             prompt,

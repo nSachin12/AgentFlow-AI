@@ -126,22 +126,25 @@ def execute_next_step(job_id: str):
 
             EventManager.add_event(job, "reflection", "started")
 
-            combined_content = "\n\n".join(
-                [item["output"] for item in job.generated_content]
-            )
-
-            review = Reflection.review(job, job.request, combined_content)
-
-            EventManager.add_event(job, "reflection", "completed")
-
-            if not review.get("is_complete", True):
-                job.generated_content.append(
-                    {
-                        "step": "reflection",
-                        "title": "Reflection Feedback",
-                        "output": review.get("feedback", "")
-                    }
+            try:
+                review = Reflection.review(job, job.request)
+                EventManager.add_event(job, "reflection", "completed")
+                if not review.get("is_complete", True):
+                    job.generated_content.append(
+                        {
+                            "step": "reflection",
+                            "title": "Reflection Feedback",
+                            "output": review.get("feedback", "")
+                        }
+                    )
+            except Exception as reflection_error:
+                EventManager.add_event(
+                    job,
+                    "reflection",
+                    "skipped",
+                    {"reason": str(reflection_error)}
                 )
+                DatabaseService.update_job(job)
 
             StateManager.set_execution_context(
                 job,
