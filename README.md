@@ -207,13 +207,13 @@ Go to **Storage** → create a bucket named `documents` → set it to **Public**
 Copy `.env.example` to `.env` and fill in:
 
 ```env
-# Gemini — https://aistudio.google.com/apikey
-GEMINI_API_KEY=
+# Groq — https://console.groq.com
+GROQ_API_KEY=
 
 # Models
-PLANNER_MODEL=gemini-2.5-flash-lite
-EXECUTOR_MODEL=gemini-2.5-flash-lite
-REFLECTION_MODEL=gemini-2.5-flash-lite
+PLANNER_MODEL=llama-3.1-8b-instant
+EXECUTOR_MODEL=llama-3.1-8b-instant
+REFLECTION_MODEL=llama-3.1-8b-instant
 
 # LLM settings
 LLM_TEMPERATURE=0.7

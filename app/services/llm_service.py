@@ -11,7 +11,7 @@ class LLMService:
     def __init__(self):
         self.client = OpenAI(
             base_url="https://api.groq.com/openai/v1",
-            api_key=os.getenv("GEMINI_API_KEY")
+            api_key=os.getenv("GROQ_API_KEY")
         )
 
         self.default_temperature = float(

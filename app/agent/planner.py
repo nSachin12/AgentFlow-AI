@@ -65,10 +65,14 @@ class Planner:
         for index, step in enumerate(
             steps
         ):
+            if isinstance(step, dict):
+                title = step.get("title") or step.get("step") or str(step)
+            else:
+                title = str(step)
             plan.append(
                 PlanStep(
                     step=index + 1,
-                    title=step
+                    title=title
                 )
             )
 
