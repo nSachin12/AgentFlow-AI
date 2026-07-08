@@ -10,7 +10,7 @@ load_dotenv()
 class LLMService:
     def __init__(self):
         self.client = OpenAI(
-            base_url="https://generativelanguage.googleapis.com/v1beta/openai/",
+            base_url="https://api.groq.com/openai/v1",
             api_key=os.getenv("GEMINI_API_KEY")
         )
 
@@ -65,12 +65,7 @@ class LLMService:
                         temperature=temperature,
                         max_tokens=max_tokens,
                         stream=False,
-                        timeout=self.request_timeout,
-                        # Gemini 2.5 models "think" before answering by default,
-                        # which burns completion tokens (and can eat the whole
-                        # max_tokens budget, returning empty content). None of
-                        # this agent's tasks need deep reasoning.
-                        reasoning_effort="none"
+                        timeout=self.request_timeout
                     )
                 )
 
