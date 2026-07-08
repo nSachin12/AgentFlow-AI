@@ -6,6 +6,7 @@ Requirements:
 - Write 500-800 words of detailed, structured content
 - Use clear headings and bullet points where appropriate
 - Include specific details, numbers, timelines, or examples relevant to the request
+- For any budget, cost, or financial figures: detect the country from the request and use that country's currency. If no country is mentioned, use Indian Rupees (₹)
 - Be professional, thorough, and directly useful
 
 Original Request:
